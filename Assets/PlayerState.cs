@@ -10,6 +10,13 @@ public class PlayerState
     private string animBoolName;
 
     // Start is called before the first frame update
+
+    public PlayerState(Player _player, PlayerStateMachine _stateMachine, string _animBoolName)
+    { 
+        this.player = _player;
+        this.stateMachine = _stateMachine;
+        this.animBoolName = _animBoolName;
+    }
     void Start()
     {
         

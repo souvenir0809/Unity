@@ -2,15 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMoveState : PlayerGroundedState
+public class PlayerJumpState : PlayerState
 {
-    public PlayerMoveState(Player _player, PlayerStateMachine _stateMachine, string _animBoolName) : base(_player, _stateMachine, _animBoolName)
+    public PlayerJumpState(Player _player, PlayerStateMachine _stateMachine, string _animBoolName) : base(_player, _stateMachine, _animBoolName)
     {
     }
 
     public override void Enter()
     {
         base.Enter();
+
+        player.rb.velocity = new Vector2(player.rb.velocity.x, player.jumpForace);
+        
     }
 
     public override void Exit()
@@ -21,11 +24,9 @@ public class PlayerMoveState : PlayerGroundedState
     public override void Update()
     {
         base.Update();
-
-        //if (Input.GetKeyDown(KeyCode.N))
-        //  stateMachine.ChangeState(player.idleState);
         player.SetVelocity(xInput * player.moveSpeed, player.rb.velocity.y);
-        if (xInput==0)
-            stateMachine.ChangeState(player.idleState);
+        if (player.rb.velocity.y < 0)
+            stateMachine.ChangeState(player.airState);
+
     }
 }

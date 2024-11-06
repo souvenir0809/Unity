@@ -8,7 +8,11 @@ public class Player : MonoBehaviour
     public float moveSpeed = 12f;
     public float jumpForace=12;
 
-    
+    [Header("Collision info")]
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private float groundCheckDistance;
+    [SerializeField] private Transform wallCheck;
+    [SerializeField] private float wallCheckDistance;
 
     #region components
     public Animator anim {  get; private set; }

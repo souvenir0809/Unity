@@ -7,6 +7,7 @@ public class PlayerState
     protected PlayerStateMachine stateMachine;
     protected Player player;
 
+    protected float xInput;
     private string animBoolName;
 
     // Start is called before the first frame update
@@ -17,14 +18,22 @@ public class PlayerState
         this.stateMachine = _stateMachine;
         this.animBoolName = _animBoolName;
     }
-    void Start()
+
+    public virtual void Enter()
     {
-        
+        player.anim.SetBool(animBoolName, true);
+        Debug.Log("i enter " + animBoolName);
     }
 
-    // Update is called once per frame
-    void Update()
+    public virtual void Update()
     {
-        
+        xInput = Input.GetAxisRaw("Horizontal");
+        Debug.Log("i in " + animBoolName);
+    }
+
+    public virtual void Exit()
+    {
+        player.anim.SetBool(animBoolName, false);
+        Debug.Log("i exit " + animBoolName);
     }
 }

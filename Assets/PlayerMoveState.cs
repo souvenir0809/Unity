@@ -24,8 +24,9 @@ public class PlayerMoveState : PlayerGroundedState
 
         //if (Input.GetKeyDown(KeyCode.N))
         //  stateMachine.ChangeState(player.idleState);
+     
         player.SetVelocity(xInput * player.moveSpeed, player.rb.velocity.y);
-        if (xInput==0)
+        if (xInput == 0 || player.IsWallDetected())
             stateMachine.ChangeState(player.idleState);
     }
 }

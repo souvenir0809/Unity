@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -40,6 +41,8 @@ public class Player : MonoBehaviour
     public PlayerDashState dashState { get; private set; }
 
     public PlayerWallSlideState wallSlide { get; private set; }
+
+    public PlayerWallJumpState wallJump { get; private set; }
     private void Awake()
     {
         stateMachine = new PlayerStateMachine();
@@ -49,6 +52,7 @@ public class Player : MonoBehaviour
         airState =  new PlayerAirState(this, stateMachine, "Jump");
         dashState = new PlayerDashState(this, stateMachine, "Dash");
         wallSlide = new PlayerWallSlideState(this, stateMachine, "WallSlide");
+        wallJump = new PlayerWallJumpState(this, stateMachine, "WallJump");
     }
 
     private void Start()
@@ -70,7 +74,12 @@ public class Player : MonoBehaviour
 
     private void CheckForDashInput() 
     {
+        
+
         dashUsageTimer -= Time.deltaTime;
+
+        if (IsWallDetected())
+            return;
 
         if (Input.GetKeyDown(KeyCode.LeftShift) && dashUsageTimer < 0)
         {
@@ -90,7 +99,13 @@ public class Player : MonoBehaviour
     }
 
     public bool IsGroundDetected() => Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, whatIsGround);
-    public bool IsWallDetected() => Physics2D.Raycast(wallCheck.position, Vector2.right, wallCheckDistance, whatIsGround);
+    public bool IsWallDetected() {
+        if(facingDir > 0)
+           return  Physics2D.Raycast(wallCheck.position, Vector2.right, wallCheckDistance, whatIsGround);
+        else 
+           return Physics2D.Raycast(wallCheck.position, Vector2.left, wallCheckDistance, whatIsGround);
+    } 
+        
 
     private void OnDrawGizmos()
     {

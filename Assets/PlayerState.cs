@@ -35,7 +35,7 @@ public class PlayerState
 
         xInput = UnityEngine.Input.GetAxisRaw("Horizontal");
         yInput = UnityEngine.Input.GetAxisRaw("Vertical");
-        Debug.Log("i in " + animBoolName);
+        //Debug.Log("i in " + animBoolName);
         player.anim.SetFloat("yVelocity", player.rb.velocity.y);
     }
 

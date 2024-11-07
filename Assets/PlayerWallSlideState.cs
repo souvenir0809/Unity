@@ -23,13 +23,18 @@ public class PlayerWallSlideState : PlayerState
     {
         base.Update();
 
-        if (xInput != 0 && player.facingDir != xInput)
-            stateMachine.ChangeState(player.idleState);
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            stateMachine.ChangeState(player.wallJump);
+            return;
+        }
+            
+        //if (xInput != 0 && player.facingDir != xInput)
+        //    stateMachine.ChangeState(player.idleState);
 
         if(yInput <0 )
             player.rb.velocity = new Vector2(0, player.rb.velocity.y );
         else
-            player.rb.velocity = new Vector2(0, player.rb.velocity.y *.7f);
+            player.rb.velocity = new Vector2(0, player.rb.velocity.y *.4f);
         if (player.IsGroundDetected())
             stateMachine.ChangeState(player.idleState);
     }

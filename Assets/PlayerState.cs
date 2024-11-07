@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Windows;
 
 public class PlayerState
 {
@@ -8,6 +9,7 @@ public class PlayerState
     protected Player player;
 
     protected float xInput;
+    protected float yInput;
     private string animBoolName;
 
     protected float stateTimer;
@@ -31,7 +33,8 @@ public class PlayerState
     {
         stateTimer -= Time.deltaTime;
 
-        xInput = Input.GetAxisRaw("Horizontal");
+        xInput = UnityEngine.Input.GetAxisRaw("Horizontal");
+        yInput = UnityEngine.Input.GetAxisRaw("Vertical");
         Debug.Log("i in " + animBoolName);
         player.anim.SetFloat("yVelocity", player.rb.velocity.y);
     }

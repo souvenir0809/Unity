@@ -39,6 +39,7 @@ public class Player : MonoBehaviour
 
     public PlayerDashState dashState { get; private set; }
 
+    public PlayerWallSlideState wallSlide { get; private set; }
     private void Awake()
     {
         stateMachine = new PlayerStateMachine();
@@ -47,6 +48,7 @@ public class Player : MonoBehaviour
         jumpState = new PlayerJumpState(this, stateMachine, "Jump");
         airState =  new PlayerAirState(this, stateMachine, "Jump");
         dashState = new PlayerDashState(this, stateMachine, "Dash");
+        wallSlide = new PlayerWallSlideState(this, stateMachine, "WallSlide");
     }
 
     private void Start()
@@ -88,6 +90,7 @@ public class Player : MonoBehaviour
     }
 
     public bool IsGroundDetected() => Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, whatIsGround);
+    public bool IsWallDetected() => Physics2D.Raycast(wallCheck.position, Vector2.right, wallCheckDistance, whatIsGround);
 
     private void OnDrawGizmos()
     {

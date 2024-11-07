@@ -8,12 +8,23 @@ public class Player : MonoBehaviour
     public float moveSpeed = 12f;
     public float jumpForace=12;
 
+    [Header("Dash info")]
+    [SerializeField] private float dashCooldown;    //固定冷却时间
+    private float dashUsageTimer;                   //倒数冷却时间
+    public float dashSpeed;
+    public float dashDuration;
+    public float dashDir { get; private set; }
+
     [Header("Collision info")]
-    [SerializeField] private Transform groundCheck;
-    [SerializeField] private float groundCheckDistance;
+    [SerializeField] private Transform groundCheck;        //地面检测坐标点
+    [SerializeField] private float groundCheckDistance;     //地面检测距离
     [SerializeField] private Transform wallCheck;
     [SerializeField] private float wallCheckDistance;
-    [SerializeField] private LayerMask whatIsGround;
+    [SerializeField] private LayerMask whatIsGround;        //地面图层
+
+    public int facingDir { get; private set; } = 1;
+    private bool facingRight = true;
+
     #region components
     public Animator anim {  get; private set; }
     public Rigidbody2D rb { get; private set; }
@@ -26,6 +37,8 @@ public class Player : MonoBehaviour
     public PlayerAirState airState { get; private set; }
     public PlayerJumpState jumpState { get; private set; }
 
+    public PlayerDashState dashState { get; private set; }
+
     private void Awake()
     {
         stateMachine = new PlayerStateMachine();
@@ -33,6 +46,7 @@ public class Player : MonoBehaviour
         moveState = new PlayerMoveState(this,stateMachine, "Move");
         jumpState = new PlayerJumpState(this, stateMachine, "Jump");
         airState =  new PlayerAirState(this, stateMachine, "Jump");
+        dashState = new PlayerDashState(this, stateMachine, "Dash");
     }
 
     private void Start()
@@ -48,6 +62,24 @@ public class Player : MonoBehaviour
     {
         
         stateMachine.currentState.Update();
+        FlipController();
+        CheckForDashInput();
+    }
+
+    private void CheckForDashInput() 
+    {
+        dashUsageTimer -= Time.deltaTime;
+
+        if (Input.GetKeyDown(KeyCode.LeftShift) && dashUsageTimer < 0)
+        {
+            dashUsageTimer = dashCooldown;
+            dashDir = Input.GetAxisRaw("Horizontal");
+            if (dashDir == 0)
+                dashDir = facingDir;
+
+            stateMachine.ChangeState(dashState);
+                
+        }
     }
 
     public void SetVelocity(float _xVelocity, float _yVelocity) 
@@ -61,5 +93,20 @@ public class Player : MonoBehaviour
     {
         Gizmos.DrawLine(groundCheck.position, new Vector3(groundCheck.position.x, groundCheck.position.y - groundCheckDistance));
         Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + wallCheckDistance,  wallCheck.position.y));
+    }
+
+    public void Flip() 
+    {
+        facingDir = facingDir * -1;
+        facingRight = !facingRight;
+        transform.Rotate(0, 180, 0);
+    }
+
+    public void FlipController() 
+    {
+        if (rb.velocity.x > 0 && !facingRight)
+            Flip();
+        else if (rb.velocity.x < 0 && facingRight)
+            Flip();
     }
 }

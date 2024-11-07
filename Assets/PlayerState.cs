@@ -10,6 +10,8 @@ public class PlayerState
     protected float xInput;
     private string animBoolName;
 
+    protected float stateTimer;
+
     // Start is called before the first frame update
 
     public PlayerState(Player _player, PlayerStateMachine _stateMachine, string _animBoolName)
@@ -27,6 +29,8 @@ public class PlayerState
 
     public virtual void Update()
     {
+        stateTimer -= Time.deltaTime;
+
         xInput = Input.GetAxisRaw("Horizontal");
         Debug.Log("i in " + animBoolName);
         player.anim.SetFloat("yVelocity", player.rb.velocity.y);

@@ -13,6 +13,7 @@ public class PlayerState
     private string animBoolName;
 
     protected float stateTimer;
+    protected bool triggerCalled;
 
     // Start is called before the first frame update
 
@@ -27,6 +28,7 @@ public class PlayerState
     {
         player.anim.SetBool(animBoolName, true);
         Debug.Log("i enter " + animBoolName);
+        triggerCalled = false;
     }
 
     public virtual void Update()
@@ -43,5 +45,10 @@ public class PlayerState
     {
         player.anim.SetBool(animBoolName, false);
         Debug.Log("i exit " + animBoolName);
+    }
+
+    public virtual void AnimationFinishTrigger()
+    {
+        triggerCalled = true;
     }
 }

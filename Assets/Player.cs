@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    [Header("Attack details")]
+    public Vector2[] attackMovement;
     public bool isBusy { get; private set; }
     [Header("Move info")]
     public float moveSpeed = 12f;
@@ -110,11 +112,16 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void ZeroVelocity() => rb.velocity = new Vector2(0, 0);
+   
+
+
     public void SetVelocity(float _xVelocity, float _yVelocity) 
     {
         rb.velocity = new Vector2(_xVelocity, _yVelocity);
     }
 
+    #region Collision
     public bool IsGroundDetected() => Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, whatIsGround);
     public bool IsWallDetected() {
         if(facingDir > 0)
@@ -129,7 +136,8 @@ public class Player : MonoBehaviour
         Gizmos.DrawLine(groundCheck.position, new Vector3(groundCheck.position.x, groundCheck.position.y - groundCheckDistance));
         Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + wallCheckDistance,  wallCheck.position.y));
     }
-
+    #endregion
+    #region Flip
     public void Flip() 
     {
         facingDir = facingDir * -1;
@@ -144,4 +152,5 @@ public class Player : MonoBehaviour
         else if (rb.velocity.x < 0 && facingRight)
             Flip();
     }
+    #endregion
 }

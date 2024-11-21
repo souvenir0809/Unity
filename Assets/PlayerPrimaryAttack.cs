@@ -21,11 +21,15 @@ public class PlayerPrimaryAttack : PlayerState
             comboCounter = 0;
 
         player.anim.SetInteger("ComboCounter", comboCounter);
+
+        stateTimer = .1f;
     }
 
     public override void Exit()
     {
         base.Exit();
+
+        player.StartCoroutine("BusyFor", 5f);
 
         comboCounter++;
         lastTimeAttacked = Time.time;

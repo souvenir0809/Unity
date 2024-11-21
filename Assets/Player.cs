@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public bool isBusy { get; private set; }
     [Header("Move info")]
     public float moveSpeed = 12f;
     public float jumpForace = 12;
@@ -62,7 +63,7 @@ public class Player : MonoBehaviour
     private void Start()
     {
         anim = GetComponentInChildren<Animator>();
-        rb = GetComponent<Rigidbody2D>();
+        rb  = GetComponent<Rigidbody2D>();
 
         stateMachine.Initialize(idleState);
     }
@@ -74,6 +75,16 @@ public class Player : MonoBehaviour
         stateMachine.currentState.Update();
         FlipController();
         CheckForDashInput();
+    }
+
+    public IEnumerable BusyFor(float _seconds)
+    {
+        isBusy = true;
+        Debug.Log("IS BUSY");
+        yield return new WaitForSeconds(_seconds);
+
+        Debug.Log("NOT BUSY");
+        isBusy = false;
     }
 
     public void AnimationTrigger() => stateMachine.currentState.AnimationFinishTrigger();
